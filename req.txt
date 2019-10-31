@@ -12,8 +12,8 @@ DNS should be designed with following constraints in mind:
 ● SectorID can be considered constant (it won’t change during runtime) 
 ● DNS request example: 
 { 
-# x, y, z are coords, vel is velocity 
-# (values sent as strings, but must be treated as floating point number) "x": "123.12", 
+//* x, y, z are coords, vel is velocity 
+//* (values sent as strings, but must be treated as floating point number) "x": "123.12", 
 "y": "456.56", "z": "789.89", "vel": "20.0", } 
 ● Complex math needed to serve a response: 
 loc = x*SectorID + y*SectorID + z*SectorID + vel 
