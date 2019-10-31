@@ -9,6 +9,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/DeshErBojhaa/housing-everywhere/handlers"
 )
 
 func main() {
@@ -25,16 +27,16 @@ func run() error {
 	log := log.New(os.Stdout, ">> ", log.LstdFlags|log.Lshortfile)
 	log.Println("initializing service")
 
+	shutdown := make(chan os.Signal, 1)
+	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
+
 	server := http.Server{
 		Addr:         ":8080",
-		Handler:      handlers.NewAPI()
+		Handler:      handlers.NewAPI(log, shutdown),
 		ErrorLog:     log,
 		ReadTimeout:  time.Duration(1) * time.Minute, // TODO: get from configuration
 		WriteTimeout: time.Duration(1) * time.Minute, // TODO: get from configuration
 	}
-
-	shutdown := make(chan os.Signal, 1)
-	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
 
 	serverErr := make(chan error, 1)
 	go func() {
