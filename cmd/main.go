@@ -19,10 +19,6 @@ func main() {
 	}
 }
 
-type dummy struct{}
-
-func (d *dummy) ServeHTTP(w http.ResponseWriter, r *http.Request) {}
-
 func run() error {
 	log := log.New(os.Stdout, ">> ", log.LstdFlags|log.Lshortfile)
 	log.Println("initializing service")
