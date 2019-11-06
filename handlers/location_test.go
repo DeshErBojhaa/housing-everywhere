@@ -61,7 +61,7 @@ func TestLocation(t *testing.T) {
 
 			if resp.Loc != want {
 				t.Logf("\t%s\twant %v got %v", Failed, want, resp.Loc)
-				t.Fail()
+				t.Fatalf("\tAborting Test")
 			}
 			t.Logf("\t%s\twant %v got %v", Success, want, resp.Loc)
 		}

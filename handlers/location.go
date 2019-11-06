@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"reflect"
 	"strconv"
 
 	"github.com/DeshErBojhaa/housing-everywhere/web"
@@ -53,30 +54,21 @@ func getLocation(ctx context.Context, w http.ResponseWriter, r *http.Request, pa
 	if err := web.Decode(r, &c); err != nil {
 		return -1.0, err
 	}
-
 	id, err := strconv.ParseFloat(params["sector_id"], 64)
 	if err != nil {
 		return -1.0, fmt.Errorf("invalid sector id %v", params["sector_id"])
 	}
 
-	x, err := strconv.ParseFloat(c.X, 64)
-	if err != nil {
-		return -1.0, fmt.Errorf("invalid sector id %v", c.X)
-	}
+	ans := 0.0
 
-	y, err := strconv.ParseFloat(c.Y, 64)
-	if err != nil {
-		return -1.0, fmt.Errorf("invalid sector id %v", c.Y)
+	v := reflect.ValueOf(c)
+	for i := 0; i < v.NumField(); i++ {
+		s := v.Field(i).String()
+		val, err := strconv.ParseFloat(s, 64)
+		if err != nil {
+			return -1.0, fmt.Errorf("invalid sector id %v", s)
+		}
+		ans += val * id
 	}
-
-	z, err := strconv.ParseFloat(c.Z, 64)
-	if err != nil {
-		return -1.0, fmt.Errorf("invalid sector id %v", c.Z)
-	}
-
-	vel, err := strconv.ParseFloat(c.Vel, 64)
-	if err != nil {
-		return -1.0, fmt.Errorf("invalid sector id %v", c.Vel)
-	}
-	return x*id + y*id + z*id + vel*id, nil
+	return ans, nil
 }
