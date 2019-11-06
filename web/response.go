@@ -37,13 +37,13 @@ func RespondError(ctx context.Context, w http.ResponseWriter, err error) error {
 
 	// If the error was of the type *Error, the handler has
 	// a specific status code and error to return.
-	if errors.Is(err, &Error{}) {
-		webErr := err.(*Error)
+	e := Error{}
+	if errors.As(err, &e) {
 		er := ErrorResponse{
-			Error:  webErr.Err.Error(),
-			Fields: webErr.Fields,
+			Error:  e.Err.Error(),
+			Fields: e.Fields,
 		}
-		if err := Respond(ctx, w, er, webErr.Status); err != nil {
+		if err := Respond(ctx, w, er, e.Status); err != nil {
 			return err
 		}
 		return nil

@@ -27,7 +27,7 @@ func run() error {
 	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
 
 	server := http.Server{
-		Addr:         ":8080",
+		Addr:         ":8080", // TODO: get from config
 		Handler:      handlers.NewAPI(log, shutdown),
 		ErrorLog:     log,
 		ReadTimeout:  time.Duration(1) * time.Minute, // TODO: get from configuration
