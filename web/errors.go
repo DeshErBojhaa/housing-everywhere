@@ -30,7 +30,7 @@ func NewRequestError(err error, status int) error {
 
 // Error implements the error interface. It uses the default message of the
 // wrapped error. This is what will be shown in the services' logs.
-func (err *Error) Error() string {
+func (err Error) Error() string {
 	return err.Err.Error()
 }
 

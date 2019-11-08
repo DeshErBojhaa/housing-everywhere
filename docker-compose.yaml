@@ -1,0 +1,19 @@
+# https://docs.docker.com/compose/compose-file
+# docker-compose up
+# docker-compose stop
+# docker-compose down
+version: '3'
+
+networks:
+  shared-network:
+    driver: bridge
+
+services:
+  dns:
+    container_name: container
+    networks:
+      - shared-network
+    image: dns:1.0
+    ports:
+      - 8080:8080 # EXPVAR API
+      - 4001:4001 # DEBUG API

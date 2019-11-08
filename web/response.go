@@ -37,7 +37,7 @@ func RespondError(ctx context.Context, w http.ResponseWriter, err error) error {
 
 	// If the error was of the type *Error, the handler has
 	// a specific status code and error to return.
-	e := Error{}
+	var e *Error
 	if errors.As(err, &e) {
 		er := ErrorResponse{
 			Error:  e.Err.Error(),

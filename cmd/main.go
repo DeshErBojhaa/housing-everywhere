@@ -61,7 +61,7 @@ func run() error {
 		case err != nil:
 			return fmt.Errorf("could not gracefully shutdown %w", err)
 		case sig == syscall.SIGSTOP:
-			return fmt.Errorf("intrigrity issue caused shutdown %w", err)
+			return fmt.Errorf("intrigrity issue caused shutdown")
 		}
 	}
 	return nil

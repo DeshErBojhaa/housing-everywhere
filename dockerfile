@@ -22,8 +22,9 @@ COPY web web
 
 # Build the service binary. We are doing this last since this will be different
 # every time we run through this process.
-WORKDIR /go/src/github.com/ardanlabs/service/cmd
-RUN set GO111MODULE=on go build -mod=readonly -o=main
+WORKDIR /go/src/github.com/DeshErBojhaa/service/cmd
+RUN set GO111MODULE=on 
+RUN go build -mod=readonly -o=main
 
 
 # Run the Go Binary in Alpine.

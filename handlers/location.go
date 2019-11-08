@@ -20,7 +20,7 @@ type Location struct {
 func (l *Location) Atlas(ctx context.Context, w http.ResponseWriter, r *http.Request, params map[string]string) error {
 	lv, err := getLocation(ctx, w, r, params)
 	if err != nil {
-		return err
+		return web.RespondError(ctx, w, web.NewRequestError(err, http.StatusBadRequest))
 	}
 	loc := struct {
 		Loc float64 `json:"loc"`
@@ -34,7 +34,7 @@ func (l *Location) Atlas(ctx context.Context, w http.ResponseWriter, r *http.Req
 func (l *Location) Mama(ctx context.Context, w http.ResponseWriter, r *http.Request, params map[string]string) error {
 	lv, err := getLocation(ctx, w, r, params)
 	if err != nil {
-		return err
+		return web.RespondError(ctx, w, web.NewRequestError(err, http.StatusBadRequest))
 	}
 	loc := struct {
 		Location float64 `json:"location"`
@@ -56,7 +56,7 @@ func getLocation(ctx context.Context, w http.ResponseWriter, r *http.Request, pa
 	}
 	id, err := strconv.ParseFloat(params["sector_id"], 64)
 	if err != nil {
-		return -1.0, fmt.Errorf("invalid sector id %v", params["sector_id"])
+		return -1.0, fmt.Errorf("invalid sector id %v, errpr: %v", params["sector_id"], err)
 	}
 
 	ans := 0.0
@@ -66,7 +66,10 @@ func getLocation(ctx context.Context, w http.ResponseWriter, r *http.Request, pa
 		s := v.Field(i).String()
 		val, err := strconv.ParseFloat(s, 64)
 		if err != nil {
-			return -1.0, fmt.Errorf("invalid sector id %v", s)
+			if s == "" {
+				return -1.0, fmt.Errorf("missing filed %v", v.Type().Field(i).Name)
+			}
+			return -1.0, fmt.Errorf("invalid filed %v caused error", v.Type().Field(i).Name)
 		}
 		ans += val * id
 	}
